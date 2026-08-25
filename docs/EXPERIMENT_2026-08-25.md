@@ -42,6 +42,8 @@ The complete machine-readable output from the public-source run is preserved in 
 
 On 2026-08-25, exact GitHub repository searches for a DeepSeek Harness Codex protocol canary or differential lab returned no matching project. Open DeepSeek Harness pull requests contained no Codex subagent upgrade, `0.149.1`, or `misalignmentPolicyViolation` change. Adjacent projects cover broad source watching, model-quality A/B comparison, Codex bridging, or runtime packaging; none compare generated Codex protocol values with the official Harness adapter.
 
+[`dsh-compat-guard`](https://github.com/Shizuku-keop/dsh-compat-guard) is the closest new adjacent project. It gates Harness and plugin upgrades, fingerprints storage formats, maintains a compatibility matrix, and provides backup and rollback. This Canary does not gate or perform an upgrade: it inspects drift in the external Codex App Server protocol against the official in-tree Codex adapter. The two tools therefore address different failure boundaries.
+
 ## Contribution decision
 
 DeepSeek Harness's current `CONTRIBUTING.md` says external pull requests are not accepted. The result is therefore published as an independent compatibility canary and a minimal Discussion report rather than an unsolicited upstream PR. The local source patch remains experiment evidence and is not represented as a mergeable official contribution.

@@ -40,4 +40,6 @@ I published a small external checker with the complete report and fixtures:
 
 It compares generated Codex error variants and newly added server-request methods with the exact cases handled by the Harness adapter. It does not execute Harness source, call a model, read credentials, modify a profile, or treat every schema diff as breaking.
 
+I also checked the new [`dsh-compat-guard` discussion](https://github.com/deepseek-ai/deepseek-harness/discussions/4487). That project gates Harness/plugin upgrades and protects user data with compatibility metadata, snapshots, migration, and rollback. This report is narrower and complementary: it checks external Codex App Server protocol values against the official in-tree Codex adapter, without performing or gating a Harness upgrade.
+
 Since the contribution guide currently says external pull requests are not accepted, I am reporting the tested change here rather than opening a PR. I would appreciate confirmation of whether this category should be preserved in the next Codex dependency update and whether this style of compatibility report is useful to maintainers.
