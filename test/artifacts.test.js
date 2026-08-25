@@ -37,3 +37,12 @@ test('GitHub workflow files are valid YAML documents', async () => {
     assert.ok(workflow.jobs)
   }
 })
+
+test('package manifest publishes the executable CLI entry', async () => {
+  const manifest = JSON.parse(await readFile(resolve(project, 'package.json'), 'utf8'))
+  const binPath = manifest.bin?.['dsh-codex-canary']
+
+  assert.equal(binPath, 'bin/dsh-codex-canary.js')
+  const binSource = await readFile(resolve(project, binPath), 'utf8')
+  assert.match(binSource, /^#!\/usr\/bin\/env node/)
+})

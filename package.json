@@ -4,7 +4,7 @@
   "description": "Detect Codex App Server protocol drift that DeepSeek Harness cannot safely interpret.",
   "type": "module",
   "bin": {
-    "dsh-codex-canary": "./bin/dsh-codex-canary.js"
+    "dsh-codex-canary": "bin/dsh-codex-canary.js"
   },
   "exports": {
     ".": "./src/index.js",
