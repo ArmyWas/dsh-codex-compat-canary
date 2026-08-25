@@ -1,0 +1,65 @@
+{
+  "name": "dsh-codex-compat-canary",
+  "version": "0.1.0",
+  "description": "Detect Codex App Server protocol drift that DeepSeek Harness cannot safely interpret.",
+  "type": "module",
+  "bin": {
+    "dsh-codex-canary": "./bin/dsh-codex-canary.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./analyze": "./src/analyze.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "schemas",
+    "docs",
+    "README.md",
+    "README.zh-CN.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check:syntax": "node --check bin/dsh-codex-canary.js && node --check src/analyze.js && node --check src/args.js && node --check src/cli.js && node --check src/format.js && node --check src/index.js && node --check src/registry.js && node --check src/schema.js && node --check src/source.js && node --check src/wire.js",
+    "check": "npm run check:syntax && npm test",
+    "pack:check": "npm pack --dry-run",
+    "prepack": "npm run check"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "codex",
+    "app-server",
+    "compatibility",
+    "protocol-drift",
+    "canary"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArmyWas/dsh-codex-compat-canary.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ArmyWas/dsh-codex-compat-canary/issues"
+  },
+  "homepage": "https://github.com/ArmyWas/dsh-codex-compat-canary#readme",
+  "author": "ArmyWas",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.9.0"
+  }
+}

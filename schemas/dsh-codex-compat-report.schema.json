@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmyWas/dsh-codex-compat-canary/raw/main/schemas/dsh-codex-compat-report.schema.json",
+  "title": "DeepSeek Harness Codex compatibility report",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "source",
+    "dsh",
+    "codex",
+    "summary",
+    "findings",
+    "protocol"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "source": {
+      "type": "object",
+      "required": ["kind", "ref", "commit"],
+      "properties": {
+        "kind": { "enum": ["github", "local"] },
+        "ref": { "type": ["string", "null"] },
+        "commit": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "dsh": {
+      "type": "object",
+      "required": ["packageVersion", "codexPin"],
+      "properties": {
+        "packageVersion": { "type": ["string", "null"] },
+        "codexPin": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "codex": {
+      "type": "object",
+      "required": ["targetVersion"],
+      "properties": { "targetVersion": { "type": "string" } },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "required": ["status", "findingCounts", "schemaFiles"],
+      "properties": {
+        "status": { "enum": ["compatible", "review", "incompatible"] },
+        "findingCounts": {
+          "type": "object",
+          "required": ["breaking", "review"],
+          "properties": {
+            "breaking": { "type": "integer", "minimum": 0 },
+            "review": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "schemaFiles": {
+          "type": "object",
+          "required": ["baseline", "target", "added", "removed", "changed"],
+          "properties": {
+            "baseline": { "type": "integer", "minimum": 0 },
+            "target": { "type": "integer", "minimum": 0 },
+            "added": { "type": "integer", "minimum": 0 },
+            "removed": { "type": "integer", "minimum": 0 },
+            "changed": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "title", "values", "remediation"],
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "enum": ["breaking", "review"] },
+          "title": { "type": "string" },
+          "values": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+          "remediation": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "protocol": { "type": "object" }
+  },
+  "additionalProperties": false
+}

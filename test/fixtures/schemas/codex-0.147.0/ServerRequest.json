@@ -1,0 +1,6 @@
+{
+  "oneOf": [
+    { "properties": { "method": { "type": "string", "enum": ["item/commandExecution/requestApproval"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["item/fileChange/requestApproval"] } } }
+  ]
+}

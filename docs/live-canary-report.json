@@ -1,0 +1,208 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-25T12:56:20.807Z",
+  "source": {
+    "kind": "github",
+    "ref": "master",
+    "commit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e"
+  },
+  "dsh": {
+    "packageVersion": "0.1.1-rc.2",
+    "codexPin": "0.147.0"
+  },
+  "codex": {
+    "targetVersion": "0.149.1"
+  },
+  "summary": {
+    "status": "incompatible",
+    "findingCounts": {
+      "breaking": 1,
+      "review": 0
+    },
+    "schemaFiles": {
+      "baseline": 285,
+      "target": 291,
+      "added": 6,
+      "removed": 0,
+      "changed": 45
+    }
+  },
+  "findings": [
+    {
+      "id": "codex-error-string-unhandled",
+      "severity": "breaking",
+      "title": "Codex string error categories degrade to unknown",
+      "values": [
+        "misalignmentPolicyViolation"
+      ],
+      "remediation": "Map every target Codex error category in failureInfo() and add union-completeness coverage."
+    }
+  ],
+  "protocol": {
+    "codexErrors": {
+      "baseline": {
+        "strings": [
+          "badRequest",
+          "contextWindowExceeded",
+          "cyberPolicy",
+          "internalServerError",
+          "other",
+          "sandboxError",
+          "serverOverloaded",
+          "sessionBudgetExceeded",
+          "threadRollbackFailed",
+          "unauthorized",
+          "usageLimitExceeded"
+        ],
+        "objects": [
+          "activeTurnNotSteerable",
+          "httpConnectionFailed",
+          "responseStreamConnectionFailed",
+          "responseStreamDisconnected",
+          "responseTooManyFailedAttempts"
+        ]
+      },
+      "target": {
+        "strings": [
+          "badRequest",
+          "contextWindowExceeded",
+          "cyberPolicy",
+          "internalServerError",
+          "misalignmentPolicyViolation",
+          "other",
+          "sandboxError",
+          "serverOverloaded",
+          "sessionBudgetExceeded",
+          "threadRollbackFailed",
+          "unauthorized",
+          "usageLimitExceeded"
+        ],
+        "objects": [
+          "activeTurnNotSteerable",
+          "httpConnectionFailed",
+          "responseStreamConnectionFailed",
+          "responseStreamDisconnected",
+          "responseTooManyFailedAttempts"
+        ]
+      },
+      "handledByDsh": {
+        "strings": [
+          "badRequest",
+          "contextWindowExceeded",
+          "cyberPolicy",
+          "internalServerError",
+          "other",
+          "sandboxError",
+          "serverOverloaded",
+          "sessionBudgetExceeded",
+          "threadRollbackFailed",
+          "unauthorized",
+          "usageLimitExceeded"
+        ],
+        "objects": [
+          "activeTurnNotSteerable",
+          "httpConnectionFailed",
+          "responseStreamConnectionFailed",
+          "responseStreamDisconnected",
+          "responseTooManyFailedAttempts"
+        ]
+      },
+      "baselineUnhandled": {
+        "strings": [],
+        "objects": []
+      }
+    },
+    "serverRequests": {
+      "baseline": [
+        "account/chatgptAuthTokens/refresh",
+        "applyPatchApproval",
+        "attestation/generate",
+        "execCommandApproval",
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/permissions/requestApproval",
+        "item/tool/call",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request"
+      ],
+      "target": [
+        "account/chatgptAuthTokens/refresh",
+        "applyPatchApproval",
+        "attestation/generate",
+        "execCommandApproval",
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/permissions/requestApproval",
+        "item/tool/call",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request"
+      ],
+      "added": [],
+      "handledByDsh": [
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/permissions/requestApproval",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request"
+      ]
+    },
+    "schemaDiff": {
+      "added": [
+        "v2/NullableGetAccountTokenUsageParams.json",
+        "v2/ProjectChangedNotification.json",
+        "v2/StrictReviewRequiredNotification.json",
+        "v2/ThreadProjectUpdatedNotification.json",
+        "v2/ThreadQueueChangedNotification.json",
+        "v2/ThreadRevertedNotification.json"
+      ],
+      "removed": [],
+      "changed": [
+        "ApplyPatchApprovalResponse.json",
+        "ClientRequest.json",
+        "ExecCommandApprovalResponse.json",
+        "ServerNotification.json",
+        "codex_app_server_protocol.schemas.json",
+        "codex_app_server_protocol.v2.schemas.json",
+        "v2/AccountRateLimitsUpdatedNotification.json",
+        "v2/AccountUpdatedNotification.json",
+        "v2/AppsReadParams.json",
+        "v2/ConfigReadResponse.json",
+        "v2/ConfigRequirementsReadResponse.json",
+        "v2/ConfigWriteResponse.json",
+        "v2/ErrorNotification.json",
+        "v2/GetAccountRateLimitsResponse.json",
+        "v2/GetAccountResponse.json",
+        "v2/GetAccountTokenUsageResponse.json",
+        "v2/HookCompletedNotification.json",
+        "v2/HookStartedNotification.json",
+        "v2/HooksListResponse.json",
+        "v2/ItemCompletedNotification.json",
+        "v2/ItemStartedNotification.json",
+        "v2/ListMcpServerStatusResponse.json",
+        "v2/McpResourceReadParams.json",
+        "v2/McpResourceReadResponse.json",
+        "v2/McpServerOauthLoginParams.json",
+        "v2/ModelListResponse.json",
+        "v2/PluginInstallParams.json",
+        "v2/ReviewStartResponse.json",
+        "v2/ThreadForkResponse.json",
+        "v2/ThreadListResponse.json",
+        "v2/ThreadMetadataUpdateResponse.json",
+        "v2/ThreadReadResponse.json",
+        "v2/ThreadResumeResponse.json",
+        "v2/ThreadRollbackResponse.json",
+        "v2/ThreadSectionCreateParams.json",
+        "v2/ThreadSectionCreateResponse.json",
+        "v2/ThreadSectionListResponse.json",
+        "v2/ThreadSectionUpdateParams.json",
+        "v2/ThreadSectionUpdateResponse.json",
+        "v2/ThreadStartResponse.json",
+        "v2/ThreadStartedNotification.json",
+        "v2/ThreadUnarchiveResponse.json",
+        "v2/TurnCompletedNotification.json",
+        "v2/TurnStartResponse.json",
+        "v2/TurnStartedNotification.json"
+      ]
+    }
+  }
+}

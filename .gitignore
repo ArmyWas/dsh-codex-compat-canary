@@ -1,0 +1,5 @@
+node_modules/
+*.tgz
+canary-report.json
+.canary-tmp/
+coverage/
