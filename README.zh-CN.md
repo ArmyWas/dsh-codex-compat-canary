@@ -2,7 +2,7 @@
 
 检测 DeepSeek Harness 无法安全解释的 Codex App Server 协议漂移。
 
-第一次真实运行已经发现一个具体兼容性问题：DeepSeek Harness `0.1.1-rc.2` 固定使用 Codex `0.147.0`，而 Codex `0.149.1` 新增了 `misalignmentPolicyViolation`；当前 Harness 适配器会把它降级显示为 `unknown`。完整基线、失败、最小修复与重复工作核查见[可复现实验报告](docs/EXPERIMENT_2026-08-25.md)。
+第一次真实运行已经发现一个具体兼容性问题：DeepSeek Harness `0.1.1-rc.2` 固定使用 Codex `0.147.0`，而 Codex `0.149.1` 新增了 `misalignmentPolicyViolation`；当前 Harness 适配器会把它降级显示为 `unknown`。完整基线、失败、最小修复与重复工作核查见[可复现实验报告](docs/EXPERIMENT_2026-08-25.md)，结果已提交到 [DeepSeek Harness 官方 Discussion #4531](https://github.com/deepseek-ai/deepseek-harness/discussions/4531)。
 
 [English](README.md)
 

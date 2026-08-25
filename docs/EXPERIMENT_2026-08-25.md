@@ -48,6 +48,8 @@ On 2026-08-25, exact GitHub repository searches for a DeepSeek Harness Codex pro
 
 DeepSeek Harness's current `CONTRIBUTING.md` says external pull requests are not accepted. The result is therefore published as an independent compatibility canary and a minimal Discussion report rather than an unsolicited upstream PR. The local source patch remains experiment evidence and is not represented as a mergeable official contribution.
 
+The upstream report is [DeepSeek Harness Discussion #4531](https://github.com/deepseek-ai/deepseek-harness/discussions/4531).
+
 ## Limits
 
 This experiment proves one compatibility gap, not complete incompatibility between the two releases. It does not compare model quality and does not use the same model behind two harnesses. The Canary deliberately reports only explicit checks and labels newly added unhandled server requests for review instead of assuming every schema change is reachable.

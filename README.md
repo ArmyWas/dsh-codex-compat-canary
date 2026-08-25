@@ -6,7 +6,7 @@
 
 Detect Codex App Server protocol drift that DeepSeek Harness cannot safely interpret.
 
-The first real run found one concrete incompatibility between DeepSeek Harness `0.1.1-rc.2` and Codex `0.149.1`: Codex added `misalignmentPolicyViolation`, while the pinned Harness adapter maps that value to `unknown`. The [reproducible experiment](docs/EXPERIMENT_2026-08-25.md) records the baseline, failure, minimal repair, and duplicate-work check.
+The first real run found one concrete incompatibility between DeepSeek Harness `0.1.1-rc.2` and Codex `0.149.1`: Codex added `misalignmentPolicyViolation`, while the pinned Harness adapter maps that value to `unknown`. The [reproducible experiment](docs/EXPERIMENT_2026-08-25.md) records the baseline, failure, minimal repair, and duplicate-work check. The result is reported upstream in [DeepSeek Harness Discussion #4531](https://github.com/deepseek-ai/deepseek-harness/discussions/4531).
 
 [简体中文](README.zh-CN.md)
 
