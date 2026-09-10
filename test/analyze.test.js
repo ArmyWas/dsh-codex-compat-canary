@@ -21,6 +21,8 @@ test('finds the real Codex 0.149.1 error-union drift', async () => {
   assert.equal(report.summary.status, 'incompatible')
   assert.equal(report.summary.findingCounts.breaking, 1)
   assert.equal(report.summary.findingCounts.review, 1)
+  assert.equal(report.findings[0].id, 'codex-error-string-forward-unhandled')
+  assert.equal(report.findings[0].scope, 'forward')
   assert.deepEqual(report.findings[0].values, ['misalignmentPolicyViolation'])
   assert.deepEqual(report.findings[1].values, ['item/new/request'])
   assert.equal(report.summary.schemaFiles.added, 1)
@@ -38,4 +40,21 @@ test('reports no baseline error gaps for the fixture adapter', async () => {
   })
   assert.equal(report.summary.status, 'compatible')
   assert.deepEqual(report.protocol.codexErrors.baselineUnhandled, { strings: [], objects: [] })
+})
+
+test('distinguishes an error already missing from the pinned baseline', async () => {
+  const source = await loadDshSource({ dshSource: fixture('dsh'), dshRef: null })
+  const report = await analyzeCompatibility({
+    dsh: { ...source, codexPin: '0.149.1' },
+    targetVersion: '0.149.1',
+    baselineSchema: fixture('schemas', 'codex-0.149.1'),
+    targetSchema: fixture('schemas', 'codex-0.149.1'),
+  })
+
+  assert.equal(report.summary.status, 'incompatible')
+  assert.equal(report.findings.length, 1)
+  assert.equal(report.findings[0].id, 'codex-error-string-pinned-unhandled')
+  assert.equal(report.findings[0].scope, 'baseline')
+  assert.deepEqual(report.findings[0].values, ['misalignmentPolicyViolation'])
+  assert.deepEqual(report.protocol.codexErrors.added, { strings: [], objects: [] })
 })

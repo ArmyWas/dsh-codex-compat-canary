@@ -1,17 +1,17 @@
 {
-  "schemaVersion": "1.0",
-  "generatedAt": "2026-08-25T12:56:20.807Z",
+  "schemaVersion": "1.1",
+  "generatedAt": "2026-09-10T06:19:54.982Z",
   "source": {
     "kind": "github",
     "ref": "master",
-    "commit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e"
+    "commit": "aa8262ec091698bae9a6b04773a6b5b06ad4aef2"
   },
   "dsh": {
-    "packageVersion": "0.1.1-rc.2",
-    "codexPin": "0.147.0"
+    "packageVersion": "0.1.5-rc.1",
+    "codexPin": "0.153.4"
   },
   "codex": {
-    "targetVersion": "0.149.1"
+    "targetVersion": "0.154.0"
   },
   "summary": {
     "status": "incompatible",
@@ -20,22 +20,23 @@
       "review": 0
     },
     "schemaFiles": {
-      "baseline": 285,
-      "target": 291,
-      "added": 6,
+      "baseline": 304,
+      "target": 305,
+      "added": 1,
       "removed": 0,
-      "changed": 45
+      "changed": 26
     }
   },
   "findings": [
     {
-      "id": "codex-error-string-unhandled",
+      "id": "codex-error-string-pinned-unhandled",
       "severity": "breaking",
-      "title": "Codex string error categories degrade to unknown",
+      "scope": "baseline",
+      "title": "Pinned Codex string error categories degrade to unknown",
       "values": [
-        "misalignmentPolicyViolation"
+        "rateLimitExceeded"
       ],
-      "remediation": "Map every target Codex error category in failureInfo() and add union-completeness coverage."
+      "remediation": "Map every string error category already present in the pinned Codex dependency in failureInfo() and add union-completeness coverage."
     }
   ],
   "protocol": {
@@ -46,7 +47,9 @@
           "contextWindowExceeded",
           "cyberPolicy",
           "internalServerError",
+          "misalignmentPolicyViolation",
           "other",
+          "rateLimitExceeded",
           "sandboxError",
           "serverOverloaded",
           "sessionBudgetExceeded",
@@ -70,6 +73,7 @@
           "internalServerError",
           "misalignmentPolicyViolation",
           "other",
+          "rateLimitExceeded",
           "sandboxError",
           "serverOverloaded",
           "sessionBudgetExceeded",
@@ -91,6 +95,7 @@
           "contextWindowExceeded",
           "cyberPolicy",
           "internalServerError",
+          "misalignmentPolicyViolation",
           "other",
           "sandboxError",
           "serverOverloaded",
@@ -108,6 +113,12 @@
         ]
       },
       "baselineUnhandled": {
+        "strings": [
+          "rateLimitExceeded"
+        ],
+        "objects": []
+      },
+      "added": {
         "strings": [],
         "objects": []
       }
@@ -148,60 +159,36 @@
     },
     "schemaDiff": {
       "added": [
-        "v2/NullableGetAccountTokenUsageParams.json",
-        "v2/ProjectChangedNotification.json",
-        "v2/StrictReviewRequiredNotification.json",
-        "v2/ThreadProjectUpdatedNotification.json",
-        "v2/ThreadQueueChangedNotification.json",
-        "v2/ThreadRevertedNotification.json"
+        "v2/NullableGetAccountRateLimitsParams.json"
       ],
       "removed": [],
       "changed": [
-        "ApplyPatchApprovalResponse.json",
         "ClientRequest.json",
-        "ExecCommandApprovalResponse.json",
+        "PermissionsRequestApprovalParams.json",
         "ServerNotification.json",
+        "ServerRequest.json",
         "codex_app_server_protocol.schemas.json",
         "codex_app_server_protocol.v2.schemas.json",
         "v2/AccountRateLimitsUpdatedNotification.json",
-        "v2/AccountUpdatedNotification.json",
-        "v2/AppsReadParams.json",
-        "v2/ConfigReadResponse.json",
         "v2/ConfigRequirementsReadResponse.json",
-        "v2/ConfigWriteResponse.json",
-        "v2/ErrorNotification.json",
         "v2/GetAccountRateLimitsResponse.json",
-        "v2/GetAccountResponse.json",
-        "v2/GetAccountTokenUsageResponse.json",
-        "v2/HookCompletedNotification.json",
-        "v2/HookStartedNotification.json",
-        "v2/HooksListResponse.json",
-        "v2/ItemCompletedNotification.json",
-        "v2/ItemStartedNotification.json",
+        "v2/ItemGuardianApprovalReviewCompletedNotification.json",
+        "v2/ItemGuardianApprovalReviewStartedNotification.json",
         "v2/ListMcpServerStatusResponse.json",
-        "v2/McpResourceReadParams.json",
-        "v2/McpResourceReadResponse.json",
-        "v2/McpServerOauthLoginParams.json",
-        "v2/ModelListResponse.json",
-        "v2/PluginInstallParams.json",
-        "v2/ReviewStartResponse.json",
+        "v2/RawResponseItemCompletedNotification.json",
+        "v2/ReviewStartParams.json",
         "v2/ThreadForkResponse.json",
+        "v2/ThreadListParams.json",
         "v2/ThreadListResponse.json",
         "v2/ThreadMetadataUpdateResponse.json",
         "v2/ThreadReadResponse.json",
+        "v2/ThreadResumeParams.json",
         "v2/ThreadResumeResponse.json",
+        "v2/ThreadRevertResponse.json",
         "v2/ThreadRollbackResponse.json",
-        "v2/ThreadSectionCreateParams.json",
-        "v2/ThreadSectionCreateResponse.json",
-        "v2/ThreadSectionListResponse.json",
-        "v2/ThreadSectionUpdateParams.json",
-        "v2/ThreadSectionUpdateResponse.json",
         "v2/ThreadStartResponse.json",
         "v2/ThreadStartedNotification.json",
-        "v2/ThreadUnarchiveResponse.json",
-        "v2/TurnCompletedNotification.json",
-        "v2/TurnStartResponse.json",
-        "v2/TurnStartedNotification.json"
+        "v2/ThreadUnarchiveResponse.json"
       ]
     }
   }

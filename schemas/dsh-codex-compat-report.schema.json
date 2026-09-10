@@ -14,7 +14,7 @@
     "protocol"
   ],
   "properties": {
-    "schemaVersion": { "const": "1.0" },
+    "schemaVersion": { "const": "1.1" },
     "generatedAt": { "type": "string", "format": "date-time" },
     "source": {
       "type": "object",
@@ -74,10 +74,11 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "severity", "title", "values", "remediation"],
+        "required": ["id", "severity", "scope", "title", "values", "remediation"],
         "properties": {
           "id": { "type": "string" },
           "severity": { "enum": ["breaking", "review"] },
+          "scope": { "enum": ["baseline", "forward"] },
           "title": { "type": "string" },
           "values": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
           "remediation": { "type": "string" }

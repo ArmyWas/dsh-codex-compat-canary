@@ -21,9 +21,10 @@ The unit of analysis is a generated Codex App Server schema pair plus the exact 
 1. Resolve the exact Harness source revision and pinned Codex version.
 2. Resolve an exact target Codex version.
 3. Generate both official Codex schema bundles.
-4. Compare consumed error variants and newly introduced server requests with the adapter's handled cases.
-5. Emit a redacted, machine-readable report and a concise terminal summary.
-6. Fail CI only at the configured severity threshold.
+4. Separate gaps already present in the pinned dependency from forward drift introduced only by the target version.
+5. Compare consumed error variants and newly introduced server requests with the adapter's handled cases.
+6. Emit a redacted, machine-readable report and a concise terminal summary.
+7. Alert once for each distinct finding set, then stay quiet until it changes or resolves.
 
 ## Non-goals for 0.1
 
@@ -45,6 +46,7 @@ The unit of analysis is a generated Codex App Server schema pair plus the exact 
 ## Roadmap, gated by evidence
 
 1. **0.1:** Error-union coverage, newly added server-request review, schema inventory, JSON report, weekly workflow.
-2. **0.2:** Add notification or request-shape checks only if a real drift bypasses v0.1.
-3. **0.3:** Optional keyless real-product scenario runner only if static checks and official smoke tests leave a demonstrated gap.
+2. **0.2:** Pinned-versus-forward classification and stateful, non-repeating compatibility alerts.
+3. **0.3:** Add notification or request-shape checks only if a real drift bypasses existing checks.
+4. **0.4:** Optional keyless real-product scenario runner only if static checks and official smoke tests leave a demonstrated gap.
 4. **Upstream:** Offer the report and minimal reproduction through GitHub Discussions while external pull requests remain closed.
