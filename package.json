@@ -1,7 +1,7 @@
 {
   "name": "dsh-codex-compat-canary",
-  "version": "0.1.0",
-  "description": "Detect Codex App Server protocol drift that DeepSeek Harness cannot safely interpret.",
+  "version": "0.2.0",
+  "description": "Detect pinned and forward Codex App Server compatibility gaps in DeepSeek Harness.",
   "type": "module",
   "bin": {
     "dsh-codex-canary": "bin/dsh-codex-canary.js"
@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
-    "check:syntax": "node --check bin/dsh-codex-canary.js && node --check src/analyze.js && node --check src/args.js && node --check src/cli.js && node --check src/format.js && node --check src/index.js && node --check src/registry.js && node --check src/schema.js && node --check src/source.js && node --check src/wire.js",
+    "check:syntax": "node --check bin/dsh-codex-canary.js && node --check src/alert-state.js && node --check src/analyze.js && node --check src/args.js && node --check src/cli.js && node --check src/format.js && node --check src/index.js && node --check src/registry.js && node --check src/schema.js && node --check src/source.js && node --check src/wire.js",
     "check": "npm run check:syntax && npm test",
     "pack:check": "npm pack --dry-run",
     "prepack": "npm run check"

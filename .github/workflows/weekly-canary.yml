@@ -47,41 +47,72 @@ jobs:
           path: canary-report.json
           retention-days: 30
       - if: ${{ always() && hashFiles('canary-report.json') != '' }}
+        id: sentinel
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require('node:fs')
+            const path = require('node:path')
+            const { pathToFileURL } = require('node:url')
+            const {
+              buildIssueBody,
+              decideAlertTransition,
+              findingsFingerprint,
+              ISSUE_TITLE,
+              LEGACY_ISSUE_TITLE,
+            } = await import(pathToFileURL(path.join(process.env.GITHUB_WORKSPACE, 'src', 'alert-state.js')).href)
             const report = JSON.parse(fs.readFileSync('canary-report.json', 'utf8'))
-            const title = '[canary] Codex App Server protocol drift detected'
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
-            const values = report.findings.map(item => `- **${item.severity}** \`${item.id}\`: ${item.values.map(value => `\`${value}\``).join(', ')}`).join('\n')
-            const body = [
-              'The scheduled compatibility canary found protocol drift that meets the configured review threshold.',
-              '',
-              `- DeepSeek Harness: \`${report.dsh.packageVersion ?? 'unknown'}\` at \`${report.source.commit ?? report.source.ref ?? 'unknown'}\``,
-              `- Codex baseline: \`${report.dsh.codexPin}\``,
-              `- Codex target: \`${report.codex.targetVersion}\``,
-              `- Status: **${report.summary.status}**`,
-              '',
-              values || '- No detailed finding was recorded.',
-              '',
-              `[Workflow run and JSON artifact](${runUrl})`,
-            ].join('\n')
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'all',
               per_page: 100,
             })
-            const existing = issues.find(issue => !issue.pull_request && issue.title === title)
-            if (report.summary.status === 'compatible') {
-              if (existing?.state === 'open') {
-                await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, state: 'closed' })
-              }
-            } else if (existing) {
-              await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, state: 'open', body })
-            } else {
-              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body })
+            const existing = issues.find(issue => (
+              !issue.pull_request && [ISSUE_TITLE, LEGACY_ISSUE_TITLE].includes(issue.title)
+            ))
+            const fingerprint = findingsFingerprint(report)
+            const transition = decideAlertTransition({ report, existingIssue: existing, fingerprint })
+            core.setOutput('should_fail', String(transition.shouldFail))
+            core.setOutput('transition', transition.kind)
+            core.notice(`Canary alert transition: ${transition.kind}`)
+
+            if (transition.kind === 'clean' || transition.kind === 'known') return
+            if (transition.kind === 'resolved') {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: `The implemented compatibility checks are green again. [Workflow run and JSON artifact](${runUrl})`,
+              })
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                state: 'closed',
+                title: ISSUE_TITLE,
+              })
+              return
             }
-      - if: ${{ steps.compatibility.outcome == 'failure' }}
+
+            const body = buildIssueBody(report, runUrl, fingerprint)
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                state: 'open',
+                title: ISSUE_TITLE,
+                body,
+              })
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: ISSUE_TITLE,
+                body,
+              })
+            }
+      - if: ${{ steps.compatibility.outcome == 'failure' && steps.sentinel.outputs.should_fail != 'false' }}
         run: exit 1

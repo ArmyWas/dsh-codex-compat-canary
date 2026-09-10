@@ -43,3 +43,7 @@ It compares generated Codex error variants and newly added server-request method
 I also checked the new [`dsh-compat-guard` discussion](https://github.com/deepseek-ai/deepseek-harness/discussions/4487). That project gates Harness/plugin upgrades and protects user data with compatibility metadata, snapshots, migration, and rollback. This report is narrower and complementary: it checks external Codex App Server protocol values against the official in-tree Codex adapter, without performing or gating a Harness upgrade.
 
 Since the contribution guide currently says external pull requests are not accepted, I am reporting the tested change here rather than opening a PR. I would appreciate confirmation of whether this category should be preserved in the next Codex dependency update and whether this style of compatibility report is useful to maintainers.
+
+## Follow-up evidence: 2026-09-10
+
+The official Harness `master` branch now pins Codex `0.153.4`, and that pinned schema already contains `rateLimitExceeded`. The current adapter still omits it from `failureInfo()`, so this is now a pinned-baseline coverage gap rather than only a warning about a future dependency update. Canary v0.2 reports those two situations separately and suppresses repeated weekly failure notifications when the exact finding set is unchanged.

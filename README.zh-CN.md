@@ -1,6 +1,6 @@
 # dsh-codex-compat-canary
 
-检测 DeepSeek Harness 无法安全解释的 Codex App Server 协议漂移。
+检测 DeepSeek Harness 无法安全解释的 Codex App Server 固定基线缺口与前向协议漂移。
 
 第一次真实运行已经发现一个具体兼容性问题：DeepSeek Harness `0.1.1-rc.2` 固定使用 Codex `0.147.0`，而 Codex `0.149.1` 新增了 `misalignmentPolicyViolation`；当前 Harness 适配器会把它降级显示为 `unknown`。完整基线、失败、最小修复与重复工作核查见[可复现实验报告](docs/EXPERIMENT_2026-08-25.md)，结果已提交到 [DeepSeek Harness 官方 Discussion #4531](https://github.com/deepseek-ai/deepseek-harness/discussions/4531)。
 
@@ -31,9 +31,10 @@ npx dsh-codex-compat-canary@latest \
 
 `--dsh-ref <分支|标签|提交>` 可固定官方源码版本；`--format json` 会把 JSON 输出到标准输出；`--fail-on review` 可让需要人工复核的漂移也令 CI 失败。
 
-## v0.1 检查范围
+## v0.2 检查范围
 
-- 对照 Codex `CodexErrorInfo` 的字符串与对象 variant，以及 Harness 适配器实际处理的 case。
+- 检查 Harness 当前固定的 Codex 依赖中已经存在、但适配器遗漏的字符串与对象 variant，并明确标为“固定基线缺口”。
+- 单独检查更高目标版本中新增加、适配器尚未处理的 variant，并标为“前向漂移”。
 - 对照 Codex 新增的服务器请求方法，以及适配器的无人值守请求处理器。
 - 汇总新增、删除和变化的生成 Schema 文件，供人工复核。
 - 在机器可读报告中记录 Harness 源码提交、包版本、Codex 固定版本和目标版本。
@@ -50,7 +51,7 @@ Canary 不宣称证明全部行为兼容。它不调用模型、不读取 Codex 
 
 ## 自动巡检
 
-仓库的每周工作流会用当前官方 Harness `master` 和最新 Codex 包运行同一套逻辑，保存 JSON 报告，并在兼容性问题持续存在时创建或更新同一个仓库 Issue；恢复兼容后会关闭该 Issue。
+仓库的每周工作流会用当前官方 Harness `master` 和最新 Codex 包运行同一套逻辑，并保存 JSON 报告。新问题、发生变化的问题或关闭后再次出现的问题会创建或更新同一个 Issue，并让当次任务报红；完全相同的已知问题不会再次更新 Issue，任务会保持绿色，因此不会每周重复发送同一封失败邮件。恢复兼容时会留下一条恢复说明并关闭 Issue。
 
 ## 安全与隐私
 

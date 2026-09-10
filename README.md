@@ -4,7 +4,7 @@
 [![Weekly canary](https://github.com/ArmyWas/dsh-codex-compat-canary/actions/workflows/weekly-canary.yml/badge.svg)](https://github.com/ArmyWas/dsh-codex-compat-canary/actions/workflows/weekly-canary.yml)
 [![npm](https://img.shields.io/npm/v/dsh-codex-compat-canary)](https://www.npmjs.com/package/dsh-codex-compat-canary)
 
-Detect Codex App Server protocol drift that DeepSeek Harness cannot safely interpret.
+Detect both pinned and forward Codex App Server compatibility gaps that DeepSeek Harness cannot safely interpret.
 
 The first real run found one concrete incompatibility between DeepSeek Harness `0.1.1-rc.2` and Codex `0.149.1`: Codex added `misalignmentPolicyViolation`, while the pinned Harness adapter maps that value to `unknown`. The [reproducible experiment](docs/EXPERIMENT_2026-08-25.md) records the baseline, failure, minimal repair, and duplicate-work check. The result is reported upstream in [DeepSeek Harness Discussion #4531](https://github.com/deepseek-ai/deepseek-harness/discussions/4531).
 
@@ -35,9 +35,10 @@ npx dsh-codex-compat-canary@latest \
 
 Use `--dsh-ref <branch|tag|commit>` for a reproducible official-source run. Use `--format json` for JSON on standard output and `--fail-on review` when review-level drift should also fail CI.
 
-## What v0.1 checks
+## What v0.2 checks
 
-- String and object variants in Codex `CodexErrorInfo` against the exact cases handled by the Harness adapter.
+- String and object variants already present in Harness's pinned Codex dependency, reported as a **pinned baseline gap** when the adapter misses them.
+- New string and object variants in a later target Codex release, reported separately as **forward drift**.
 - Newly added Codex server-request methods against the adapter's unattended request handler.
 - Added, removed, and changed generated schema files for review context.
 - The exact Harness source commit, package version, Codex pin, and target Codex version in a machine-readable report.
@@ -54,7 +55,7 @@ The canary does not claim complete behavioral compatibility. It does not call a 
 
 ## Automation
 
-This repository's weekly workflow runs the released logic against the current official Harness `master` and latest Codex package, preserves the JSON report as an artifact, and opens or updates one repository issue when a detected incompatibility persists. It closes that issue after the implemented checks return to compatible.
+This repository's weekly workflow runs the released logic against the current official Harness `master` and latest Codex package and preserves the JSON report as an artifact. A new, changed, or recurring-after-resolution finding opens or updates one issue and makes that run fail. An identical known finding leaves the issue untouched and the job green, so it does not send the same failure notification every week. Recovery adds one resolution comment and closes the issue.
 
 ## Safety and privacy
 

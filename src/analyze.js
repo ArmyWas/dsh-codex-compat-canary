@@ -6,8 +6,8 @@ function difference(left, right) {
   return left.filter(value => !rightSet.has(value)).sort()
 }
 
-function finding(id, severity, title, values, remediation) {
-  return { id, severity, title, values, remediation }
+function finding(id, severity, scope, title, values, remediation) {
+  return { id, severity, scope, title, values, remediation }
 }
 
 export async function analyzeCompatibility({ dsh, targetVersion, baselineSchema, targetSchema, now = new Date() }) {
@@ -23,25 +23,53 @@ export async function analyzeCompatibility({ dsh, targetVersion, baselineSchema,
   const schemaDiff = compareInventories(baselineInventory, targetInventory)
   const findings = []
 
-  const unhandledStringErrors = difference(targetErrors.strings, wire.stringErrors)
-  if (unhandledStringErrors.length > 0) {
+  const baselineUnhandledStrings = difference(baselineErrors.strings, wire.stringErrors)
+  if (baselineUnhandledStrings.length > 0) {
     findings.push(finding(
-      'codex-error-string-unhandled',
+      'codex-error-string-pinned-unhandled',
       'breaking',
-      'Codex string error categories degrade to unknown',
-      unhandledStringErrors,
-      'Map every target Codex error category in failureInfo() and add union-completeness coverage.',
+      'baseline',
+      'Pinned Codex string error categories degrade to unknown',
+      baselineUnhandledStrings,
+      'Map every string error category already present in the pinned Codex dependency in failureInfo() and add union-completeness coverage.',
     ))
   }
 
-  const unhandledObjectErrors = difference(targetErrors.objects, wire.objectErrors)
-  if (unhandledObjectErrors.length > 0) {
+  const baselineUnhandledObjects = difference(baselineErrors.objects, wire.objectErrors)
+  if (baselineUnhandledObjects.length > 0) {
     findings.push(finding(
-      'codex-error-object-unhandled',
+      'codex-error-object-pinned-unhandled',
       'breaking',
-      'Codex object error categories degrade to unknown',
-      unhandledObjectErrors,
-      'Parse every target object error category in objectFailureInfo() and preserve its safe fields.',
+      'baseline',
+      'Pinned Codex object error categories degrade to unknown',
+      baselineUnhandledObjects,
+      'Parse every object error category already present in the pinned Codex dependency in objectFailureInfo() and preserve its safe fields.',
+    ))
+  }
+
+  const addedStringErrors = difference(targetErrors.strings, baselineErrors.strings)
+  const addedUnhandledStringErrors = difference(addedStringErrors, wire.stringErrors)
+  if (addedUnhandledStringErrors.length > 0) {
+    findings.push(finding(
+      'codex-error-string-forward-unhandled',
+      'breaking',
+      'forward',
+      'New target Codex string error categories would degrade to unknown',
+      addedUnhandledStringErrors,
+      'Before updating the Codex pin, map every new target string error category in failureInfo() and add union-completeness coverage.',
+    ))
+  }
+
+  const addedObjectErrors = difference(targetErrors.objects, baselineErrors.objects)
+  const addedUnhandledObjectErrors = difference(addedObjectErrors, wire.objectErrors)
+  if (addedUnhandledObjectErrors.length > 0) {
+    findings.push(finding(
+      'codex-error-object-forward-unhandled',
+      'breaking',
+      'forward',
+      'New target Codex object error categories would degrade to unknown',
+      addedUnhandledObjectErrors,
+      'Before updating the Codex pin, parse every new target object error category in objectFailureInfo() and preserve its safe fields.',
     ))
   }
 
@@ -51,14 +79,13 @@ export async function analyzeCompatibility({ dsh, targetVersion, baselineSchema,
     findings.push(finding(
       'codex-server-request-new-unhandled',
       'review',
+      'forward',
       'New Codex server requests are not handled by the one-shot adapter',
       addedUnhandledRequests,
       'Confirm whether the selected Codex configuration can emit each request, then add a safe unattended response or explicit compatibility decision.',
     ))
   }
 
-  const baselineUnhandledStrings = difference(baselineErrors.strings, wire.stringErrors)
-  const baselineUnhandledObjects = difference(baselineErrors.objects, wire.objectErrors)
   const counts = {
     breaking: findings.filter(item => item.severity === 'breaking').length,
     review: findings.filter(item => item.severity === 'review').length,
@@ -66,7 +93,7 @@ export async function analyzeCompatibility({ dsh, targetVersion, baselineSchema,
   const status = counts.breaking > 0 ? 'incompatible' : counts.review > 0 ? 'review' : 'compatible'
 
   return {
-    schemaVersion: '1.0',
+    schemaVersion: '1.1',
     generatedAt: now.toISOString(),
     source: dsh.source,
     dsh: {
@@ -97,6 +124,10 @@ export async function analyzeCompatibility({ dsh, targetVersion, baselineSchema,
         baselineUnhandled: {
           strings: baselineUnhandledStrings,
           objects: baselineUnhandledObjects,
+        },
+        added: {
+          strings: addedStringErrors,
+          objects: addedObjectErrors,
         },
       },
       serverRequests: {

@@ -1,4 +1,5 @@
 const BADGES = { breaking: 'BREAKING', review: 'REVIEW' }
+const SCOPES = { baseline: 'PINNED BASELINE', forward: 'FORWARD DRIFT' }
 
 export function formatText(report) {
   const lines = [
@@ -13,7 +14,7 @@ export function formatText(report) {
   } else {
     lines.push('')
     for (const item of report.findings) {
-      lines.push(`[${BADGES[item.severity]}] ${item.title}`)
+      lines.push(`[${BADGES[item.severity]}][${SCOPES[item.scope]}] ${item.title}`)
       lines.push(`  Values: ${item.values.join(', ')}`)
       lines.push(`  Action: ${item.remediation}`)
     }

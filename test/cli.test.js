@@ -30,7 +30,7 @@ test('emits machine-readable JSON without changing the requested policy', () => 
   const result = run(['--format', 'json', '--fail-on', 'never'])
   assert.equal(result.status, 0)
   const report = JSON.parse(result.stdout)
-  assert.equal(report.schemaVersion, '1.0')
+  assert.equal(report.schemaVersion, '1.1')
   assert.equal(report.summary.status, 'incompatible')
 })
 
@@ -40,5 +40,5 @@ test('prints package version', () => {
     windowsHide: true,
   })
   assert.equal(result.status, 0)
-  assert.equal(result.stdout.trim(), '0.1.0')
+  assert.equal(result.stdout.trim(), '0.2.0')
 })
