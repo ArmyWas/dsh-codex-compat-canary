@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Read the observed Codex 0.162.1/0.163.0 `anyOf` error union while retaining historical `oneOf` support.
+- Report open error fallbacks as review-level coverage limits and reject unrecognized schema members.
+- Preserve a privacy-trimmed incomplete-check artifact on execution errors while retaining CLI exit code 2.
+- Track and deduplicate execution failures independently of compatibility findings; resolve execution alerts only after a completed comparison.
+
 ## 0.2.0 - 2026-09-10
 
 - Distinguish adapter gaps already present in Harness's pinned Codex baseline from forward drift in a newer target release.

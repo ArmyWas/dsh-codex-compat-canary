@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DeepSeek Harness Codex incomplete-check report",
+  "type": "object",
+  "required": ["schemaVersion", "reportType", "generatedAt", "source", "dsh", "codex", "summary", "error"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "reportType": { "const": "execution-error" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "source": {
+      "type": ["object", "null"],
+      "properties": {
+        "kind": { "enum": ["github", "local"] },
+        "ref": { "type": ["string", "null"] },
+        "commit": { "type": ["string", "null"] }
+      },
+      "required": ["kind", "ref", "commit"],
+      "additionalProperties": false
+    },
+    "dsh": {
+      "type": "object",
+      "properties": {
+        "packageVersion": { "type": ["string", "null"] },
+        "codexPin": { "type": ["string", "null"] }
+      },
+      "required": ["packageVersion", "codexPin"],
+      "additionalProperties": false
+    },
+    "codex": {
+      "type": "object",
+      "properties": { "targetVersion": { "type": ["string", "null"] } },
+      "required": ["targetVersion"],
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "properties": { "status": { "const": "incomplete" } },
+      "required": ["status"],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "stage": { "enum": ["source", "registry", "schema-generation", "analysis", "report"] },
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "required": ["stage", "code", "message"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

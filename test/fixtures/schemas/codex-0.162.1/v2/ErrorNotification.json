@@ -1,0 +1,18 @@
+{
+  "definitions": {
+    "CodexErrorInfo": {
+      "anyOf": [
+        {
+          "enum": ["contextWindowExceeded", "sessionBudgetExceeded", "usageLimitExceeded", "rateLimitExceeded", "flexUnavailable", "serverOverloaded", "cyberPolicy", "misalignmentPolicyViolation", "tooManyDenials", "internalServerError", "unauthorized", "badRequest", "threadRollbackFailed", "sandboxError", "other"],
+          "type": "string"
+        },
+        { "type": "object", "required": ["httpConnectionFailed"] },
+        { "type": "object", "required": ["responseStreamConnectionFailed"] },
+        { "type": "object", "required": ["responseStreamDisconnected"] },
+        { "type": "object", "required": ["responseTooManyFailedAttempts"] },
+        { "type": "object", "required": ["activeTurnNotSteerable"] },
+        { "type": ["string", "object"] }
+      ]
+    }
+  }
+}

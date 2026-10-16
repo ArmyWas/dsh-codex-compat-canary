@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
-    "check:syntax": "node --check bin/dsh-codex-canary.js && node --check src/alert-state.js && node --check src/analyze.js && node --check src/args.js && node --check src/cli.js && node --check src/format.js && node --check src/index.js && node --check src/registry.js && node --check src/schema.js && node --check src/source.js && node --check src/wire.js",
+    "check:syntax": "node --check bin/dsh-codex-canary.js && node --check src/alert-state.js && node --check src/analyze.js && node --check src/args.js && node --check src/cli.js && node --check src/execution-alert.js && node --check src/execution-failure.js && node --check src/format.js && node --check src/index.js && node --check src/registry.js && node --check src/schema.js && node --check src/source.js && node --check src/wire.js && node --check .github/scripts/sync-canary-alerts.mjs",
     "check": "npm run check:syntax && npm test",
     "pack:check": "npm pack --dry-run",
     "prepack": "npm run check"
