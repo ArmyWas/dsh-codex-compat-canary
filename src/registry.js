@@ -17,13 +17,13 @@ export async function resolveCodexVersion(requested, fetchImpl = fetch) {
         return payload.version
       }
       if (response.status < 500 && response.status !== 429) {
-        throw new Error(`npm registry returned HTTP ${response.status} for @openai/codex/latest`)
+        throw Object.assign(new Error(`npm registry returned HTTP ${response.status} for @openai/codex/latest`), { status: response.status })
       }
-      lastError = new Error(`npm registry returned HTTP ${response.status} for @openai/codex/latest`)
+      lastError = Object.assign(new Error(`npm registry returned HTTP ${response.status} for @openai/codex/latest`), { status: response.status })
     } catch (error) {
       lastError = error
     }
   }
   const message = lastError instanceof Error ? lastError.message : String(lastError)
-  throw new Error(`npm registry request failed: ${message}`)
+  throw new Error(`npm registry request failed: ${message}`, { cause: lastError })
 }

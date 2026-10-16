@@ -41,6 +41,9 @@ export function decideAlertTransition({ report, existingIssue, fingerprint = fin
 }
 
 function issueSummary(report) {
+  if (report.findings.every(item => item.id.startsWith('codex-error-open-'))) {
+    return 'The generated Codex schema permits error values beyond its enumerated categories. Adapter fallback behavior needs review before error coverage can be treated as exhaustive.'
+  }
   const scopes = new Set(report.findings.map(item => item.scope))
   if (scopes.has('baseline') && scopes.has('forward')) {
     return 'The canary found both a gap in the currently pinned Codex protocol and forward drift in the selected target version.'

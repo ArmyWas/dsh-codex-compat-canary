@@ -8,6 +8,7 @@ import addFormats from 'ajv-formats'
 import { parse as parseYaml } from 'yaml'
 import { analyzeCompatibility } from '../src/analyze.js'
 import { loadDshSource } from '../src/source.js'
+import { buildExecutionFailure } from '../src/execution-failure.js'
 
 const root = dirname(fileURLToPath(import.meta.url))
 const project = resolve(root, '..')
@@ -25,6 +26,15 @@ test('generated reports satisfy the published JSON schema', async () => {
     baselineSchema: fixture('schemas', 'codex-0.147.0'),
     targetSchema: fixture('schemas', 'codex-0.149.1'),
   })
+  assert.equal(validate(report), true, JSON.stringify(validate.errors))
+})
+
+test('incomplete-check artifacts satisfy their separate schema', async () => {
+  const schema = JSON.parse(await readFile(resolve(project, 'schemas', 'dsh-codex-execution-failure.schema.json'), 'utf8'))
+  const ajv = new Ajv2020({ allErrors: true })
+  addFormats(ajv)
+  const validate = ajv.compile(schema)
+  const report = buildExecutionFailure({ stage: 'source', error: new Error('private source path') })
   assert.equal(validate(report), true, JSON.stringify(validate.errors))
 })
 

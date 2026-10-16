@@ -10,6 +10,7 @@ import { formatText } from './format.js'
 import { resolveCodexVersion } from './registry.js'
 import { generateCodexSchema } from './schema.js'
 import { loadDshSource } from './source.js'
+import { buildExecutionFailure } from './execution-failure.js'
 
 const packagePath = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'package.json')
 
@@ -24,8 +25,12 @@ function write(stream, value) {
 
 export async function runCli(argv, io) {
   let temporaryRoot = null
+  let options = null
+  let dsh = null
+  let targetVersion = null
+  let stage = 'source'
   try {
-    const options = parseArgs(argv)
+    options = parseArgs(argv)
     if (options.help) {
       write(io.stdout, HELP)
       return 0
@@ -35,12 +40,14 @@ export async function runCli(argv, io) {
       return 0
     }
 
-    const dsh = await loadDshSource(options)
-    const targetVersion = await resolveCodexVersion(options.codexVersion)
+    dsh = await loadDshSource(options)
+    stage = 'registry'
+    targetVersion = await resolveCodexVersion(options.codexVersion)
     let baselineSchema = options.baselineSchema === null ? null : resolve(options.baselineSchema)
     let targetSchema = options.targetSchema === null ? null : resolve(options.targetSchema)
 
     if (baselineSchema === null) {
+      stage = 'schema-generation'
       temporaryRoot = await mkdtemp(join(tmpdir(), 'dsh-codex-canary-'))
       baselineSchema = join(temporaryRoot, `codex-${dsh.codexPin}`)
       targetSchema = dsh.codexPin === targetVersion
@@ -54,28 +61,44 @@ export async function runCli(argv, io) {
       }
     }
 
+    stage = 'analysis'
     const report = await analyzeCompatibility({
       dsh,
       targetVersion,
       baselineSchema,
       targetSchema,
     })
-    write(io.stdout, options.format === 'json' ? JSON.stringify(report, null, 2) : formatText(report))
-
     if (options.jsonPath !== null) {
+      stage = 'report'
       const output = resolve(options.jsonPath)
       await mkdir(dirname(output), { recursive: true })
       await writeFile(output, `${JSON.stringify(report, null, 2)}\n`, 'utf8')
       write(io.stderr, `Wrote report to ${output}`)
     }
+    write(io.stdout, options.format === 'json' ? JSON.stringify(report, null, 2) : formatText(report))
     if (options.keepTemp && temporaryRoot !== null) {
       write(io.stderr, `Kept generated schemas at ${temporaryRoot}`)
       temporaryRoot = null
     }
     return shouldFail(report, options.failOn) ? 1 : 0
   } catch (error) {
-    const prefix = error instanceof ArgumentError ? 'argument error' : 'error'
-    write(io.stderr, `dsh-codex-canary ${prefix}: ${error instanceof Error ? error.message : String(error)}`)
+    if (error instanceof ArgumentError) {
+      write(io.stderr, `dsh-codex-canary argument error: ${error.message}`)
+    } else {
+      const failure = buildExecutionFailure({ stage, dsh, targetVersion, error })
+      write(io.stderr, `dsh-codex-canary error [${failure.error.code}]: ${failure.error.message}`)
+      if (options?.format === 'json') write(io.stdout, JSON.stringify(failure, null, 2))
+      if (options?.jsonPath != null) {
+        try {
+          const output = resolve(options.jsonPath)
+          await mkdir(dirname(output), { recursive: true })
+          await writeFile(output, `${JSON.stringify(failure, null, 2)}\n`, 'utf8')
+          write(io.stderr, 'Wrote an incomplete-check report to the requested JSON path')
+        } catch {
+          write(io.stderr, 'Could not write the incomplete-check report')
+        }
+      }
+    }
     return 2
   } finally {
     if (temporaryRoot !== null) await rm(temporaryRoot, { recursive: true, force: true })

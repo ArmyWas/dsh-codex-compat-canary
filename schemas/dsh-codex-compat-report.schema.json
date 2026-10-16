@@ -86,7 +86,59 @@
         "additionalProperties": false
       }
     },
-    "protocol": { "type": "object" }
+    "protocol": {
+      "type": "object",
+      "required": ["codexErrors", "serverRequests", "schemaDiff"],
+      "properties": {
+        "codexErrors": {
+          "type": "object",
+          "required": ["baseline", "target", "handledByDsh", "baselineUnhandled", "added"],
+          "properties": {
+            "baseline": { "$ref": "#/$defs/errorVariants" },
+            "target": { "$ref": "#/$defs/errorVariants" },
+            "handledByDsh": { "$ref": "#/$defs/errorVariants" },
+            "baselineUnhandled": { "$ref": "#/$defs/errorVariants" },
+            "added": { "$ref": "#/$defs/errorVariants" }
+          },
+          "additionalProperties": false
+        },
+        "serverRequests": {
+          "type": "object",
+          "required": ["baseline", "target", "added", "handledByDsh"],
+          "properties": {
+            "baseline": { "$ref": "#/$defs/strings" },
+            "target": { "$ref": "#/$defs/strings" },
+            "added": { "$ref": "#/$defs/strings" },
+            "handledByDsh": { "$ref": "#/$defs/strings" }
+          },
+          "additionalProperties": false
+        },
+        "schemaDiff": {
+          "type": "object",
+          "required": ["added", "removed", "changed"],
+          "properties": {
+            "added": { "$ref": "#/$defs/strings" },
+            "removed": { "$ref": "#/$defs/strings" },
+            "changed": { "$ref": "#/$defs/strings" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "strings": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "errorVariants": {
+      "type": "object",
+      "required": ["strings", "objects"],
+      "properties": {
+        "strings": { "$ref": "#/$defs/strings" },
+        "objects": { "$ref": "#/$defs/strings" },
+        "openTypes": { "type": "array", "items": { "enum": ["string", "object"] }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": false
 }

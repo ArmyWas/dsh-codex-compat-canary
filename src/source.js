@@ -50,15 +50,15 @@ async function githubJson(url, fetchImpl) {
       })
       if (response.ok) return response.json()
       if (response.status < 500 && response.status !== 429) {
-        throw new Error(`GitHub returned HTTP ${response.status}`)
+        throw Object.assign(new Error(`GitHub returned HTTP ${response.status}`), { status: response.status })
       }
-      lastError = new Error(`GitHub returned HTTP ${response.status}`)
+      lastError = Object.assign(new Error(`GitHub returned HTTP ${response.status}`), { status: response.status })
     } catch (error) {
       lastError = error
     }
   }
   const message = lastError instanceof Error ? lastError.message : String(lastError)
-  throw new Error(`GitHub API request failed for ${url}: ${message}`)
+  throw new Error(`GitHub API request failed for ${url}: ${message}`, { cause: lastError })
 }
 
 async function fetchRepositoryFile(path, ref, fetchImpl) {

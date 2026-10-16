@@ -40,6 +40,7 @@ Use `--dsh-ref <branch|tag|commit>` for a reproducible official-source run. Use 
 - String and object variants already present in Harness's pinned Codex dependency, reported as a **pinned baseline gap** when the adapter misses them.
 - New string and object variants in a later target Codex release, reported separately as **forward drift**.
 - Newly added Codex server-request methods against the adapter's unattended request handler.
+- Enumerated errors in either `oneOf` or `anyOf` schemas. Open string/object fallbacks produce a review finding, because their coverage cannot be enumerated.
 - Added, removed, and changed generated schema files for review context.
 - The exact Harness source commit, package version, Codex pin, and target Codex version in a machine-readable report.
 
@@ -55,7 +56,11 @@ The canary does not claim complete behavioral compatibility. It does not call a 
 
 ## Automation
 
-This repository's weekly workflow runs the released logic against the current official Harness `master` and latest Codex package and preserves the JSON report as an artifact. A new, changed, or recurring-after-resolution finding opens or updates one issue and makes that run fail. An identical known finding leaves the issue untouched and the job green, so it does not send the same failure notification every week. Recovery adds one resolution comment and closes the issue.
+This repository's weekly workflow runs the repository logic against the current official Harness `master` and latest Codex package and preserves the JSON report as an artifact. A new, changed, or recurring-after-resolution finding opens or updates one issue and makes that run fail. An identical known finding leaves the issue untouched and the job green, so it does not send the same failure notification every week. Recovery adds one resolution comment and closes the issue.
+
+The repository also preserves an **incomplete-check** JSON report when source resolution, schema generation, or analysis fails. Those reports use `reportType: "execution-error"`, status `incomplete`, and the separate [execution-failure schema](schemas/dsh-codex-execution-failure.schema.json). CLI exit code `2` is preserved even with `--fail-on never`. A separate execution issue tracks new or changed failures without changing the existing compatibility issue. Identical failures stay quiet with an explicit incomplete warning; any later completed comparison resolves that execution issue, including a completed comparison that still finds incompatibilities. A green deduplicated workflow is therefore not a compatibility verdict.
+
+These schema and incomplete-report improvements are currently in repository source; the published npm package is unchanged until a separate release. See the [observed Codex 0.162.1/0.163.0 regression](docs/SCHEMA_REGRESSION_2026-10-16.md).
 
 ## Safety and privacy
 

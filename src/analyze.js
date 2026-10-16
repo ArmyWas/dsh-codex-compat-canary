@@ -86,6 +86,21 @@ export async function analyzeCompatibility({ dsh, targetVersion, baselineSchema,
     ))
   }
 
+  for (const [scope, errors] of [['baseline', baselineErrors], ['forward', targetErrors]]) {
+    const openTypes = scope === 'forward'
+      ? difference(errors.openTypes, baselineErrors.openTypes)
+      : errors.openTypes
+    if (openTypes.length === 0) continue
+    findings.push(finding(
+      `codex-error-open-${scope}`,
+      'review',
+      scope,
+      'Codex accepts error values beyond the enumerated categories',
+      openTypes,
+      'Review the adapter fallback for unknown string and object errors. Enumerated variants remain checked, but the generated schema cannot establish exhaustive error coverage.',
+    ))
+  }
+
   const counts = {
     breaking: findings.filter(item => item.severity === 'breaking').length,
     review: findings.filter(item => item.severity === 'review').length,

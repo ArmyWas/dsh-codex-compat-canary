@@ -1,0 +1,14 @@
+{
+  "oneOf": [
+    { "properties": { "method": { "type": "string", "enum": ["item/commandExecution/requestApproval"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["item/fileChange/requestApproval"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["item/tool/requestUserInput"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["mcpServer/elicitation/request"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["item/permissions/requestApproval"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["item/tool/call"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["account/chatgptAuthTokens/refresh"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["attestation/generate"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["applyPatchApproval"] } } },
+    { "properties": { "method": { "type": "string", "enum": ["execCommandApproval"] } } }
+  ]
+}
