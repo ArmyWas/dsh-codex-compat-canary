@@ -60,7 +60,7 @@ This repository's weekly workflow runs the repository logic against the current 
 
 The repository also preserves an **incomplete-check** JSON report when source resolution, schema generation, or analysis fails. Those reports use `reportType: "execution-error"`, status `incomplete`, and the separate [execution-failure schema](schemas/dsh-codex-execution-failure.schema.json). CLI exit code `2` is preserved even with `--fail-on never`. A separate execution issue tracks new or changed failures without changing the existing compatibility issue. Identical failures stay quiet with an explicit incomplete warning; any later completed comparison resolves that execution issue, including a completed comparison that still finds incompatibilities. A green deduplicated workflow is therefore not a compatibility verdict.
 
-These schema and incomplete-report improvements are currently in repository source; the published npm package is unchanged until a separate release. See the [observed Codex 0.162.1/0.163.0 regression](docs/SCHEMA_REGRESSION_2026-10-16.md).
+Version 0.2.1 includes these schema-reader and incomplete-report repairs. npm 0.2.0 does not accept the newer `anyOf` error representation. See the [0.162.1/0.163.0 regression](docs/SCHEMA_REGRESSION_2026-10-16.md) and the [exact-version 0.165.0 verification](docs/PROTOCOL_REGRESSION_2026-10-29.md). The latter adds `modelNotFound` as a forward-drift regression; it does not patch Harness or assert that a real model task failed.
 
 ## Safety and privacy
 

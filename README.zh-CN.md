@@ -56,7 +56,10 @@ Canary 不宣称证明全部行为兼容。它不调用模型、不读取 Codex 
 
 源码读取、Schema 生成或解析失败时，仓库现在也会保存“检查未完成”的 JSON 报告：`reportType: "execution-error"`、状态 `incomplete`，使用[独立报告格式](schemas/dsh-codex-execution-failure.schema.json)。CLI 仍返回 `2`，即使设置 `--fail-on never` 也不会被当成成功。独立的执行故障 Issue 跟踪新故障和变化，原有兼容性 Issue 保持原状态；相同故障去重时仍明确警告检查未完成。之后只要比较完整执行，就关闭执行故障 Issue，即使结果仍发现不兼容。因此，告警去重后的绿色任务不等于兼容问题已修复。
 
-上述 Schema 和失败报告改进目前位于仓库源码中；npm 已发布版本需另行发布后才会更新。真实复现与版本证据见 [Codex 0.162.1/0.163.0 回归记录](docs/SCHEMA_REGRESSION_2026-10-16.md)。
+`0.2.1` 包含上述 Schema 解析和失败报告修复；npm `0.2.0` 无法读取较新的 `anyOf` 错误表示。
+版本证据见 [0.162.1/0.163.0 回归记录](docs/SCHEMA_REGRESSION_2026-10-16.md)与
+[固定版本 0.165.0 验证](docs/PROTOCOL_REGRESSION_2026-10-29.md)。后者新增
+`modelNotFound` 前向漂移回归，不会修改 Harness，也不代表真实模型任务已经失败。
 
 ## 安全与隐私
 

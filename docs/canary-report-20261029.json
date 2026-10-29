@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "1.1",
+  "generatedAt": "2026-10-29T09:13:07.155Z",
+  "source": {
+    "kind": "github",
+    "ref": "f3803c96974ad4a94195fb97e5c637e9c2a3afe3",
+    "commit": "f3803c96974ad4a94195fb97e5c637e9c2a3afe3"
+  },
+  "dsh": {
+    "packageVersion": "0.2.2-alpha.2",
+    "codexPin": "0.153.4"
+  },
+  "codex": {
+    "targetVersion": "0.165.0"
+  },
+  "summary": {
+    "status": "incompatible",
+    "findingCounts": {
+      "breaking": 2,
+      "review": 1
+    },
+    "schemaFiles": {
+      "baseline": 304,
+      "target": 320,
+      "added": 18,
+      "removed": 2,
+      "changed": 58
+    }
+  },
+  "findings": [
+    {
+      "id": "codex-error-string-pinned-unhandled",
+      "severity": "breaking",
+      "scope": "baseline",
+      "title": "Pinned Codex string error categories degrade to unknown",
+      "values": [
+        "rateLimitExceeded"
+      ],
+      "remediation": "Map every string error category already present in the pinned Codex dependency in failureInfo() and add union-completeness coverage."
+    },
+    {
+      "id": "codex-error-string-forward-unhandled",
+      "severity": "breaking",
+      "scope": "forward",
+      "title": "New target Codex string error categories would degrade to unknown",
+      "values": [
+        "flexUnavailable",
+        "modelNotFound",
+        "tooManyDenials"
+      ],
+      "remediation": "Before updating the Codex pin, map every new target string error category in failureInfo() and add union-completeness coverage."
+    },
+    {
+      "id": "codex-error-open-forward",
+      "severity": "review",
+      "scope": "forward",
+      "title": "Codex accepts error values beyond the enumerated categories",
+      "values": [
+        "object",
+        "string"
+      ],
+      "remediation": "Review the adapter fallback for unknown string and object errors. Enumerated variants remain checked, but the generated schema cannot establish exhaustive error coverage."
+    }
+  ],
+  "protocol": {
+    "codexErrors": {
+      "baseline": {
+        "strings": [
+          "badRequest",
+          "contextWindowExceeded",
+          "cyberPolicy",
+          "internalServerError",
+          "misalignmentPolicyViolation",
+          "other",
+          "rateLimitExceeded",
+          "sandboxError",
+          "serverOverloaded",
+          "sessionBudgetExceeded",
+          "threadRollbackFailed",
+          "unauthorized",
+          "usageLimitExceeded"
+        ],
+        "objects": [
+          "activeTurnNotSteerable",
+          "httpConnectionFailed",
+          "responseStreamConnectionFailed",
+          "responseStreamDisconnected",
+          "responseTooManyFailedAttempts"
+        ],
+        "openTypes": []
+      },
+      "target": {
+        "strings": [
+          "badRequest",
+          "contextWindowExceeded",
+          "cyberPolicy",
+          "flexUnavailable",
+          "internalServerError",
+          "misalignmentPolicyViolation",
+          "modelNotFound",
+          "other",
+          "rateLimitExceeded",
+          "sandboxError",
+          "serverOverloaded",
+          "sessionBudgetExceeded",
+          "threadRollbackFailed",
+          "tooManyDenials",
+          "unauthorized",
+          "usageLimitExceeded"
+        ],
+        "objects": [
+          "activeTurnNotSteerable",
+          "httpConnectionFailed",
+          "responseStreamConnectionFailed",
+          "responseStreamDisconnected",
+          "responseTooManyFailedAttempts"
+        ],
+        "openTypes": [
+          "object",
+          "string"
+        ]
+      },
+      "handledByDsh": {
+        "strings": [
+          "badRequest",
+          "contextWindowExceeded",
+          "cyberPolicy",
+          "internalServerError",
+          "misalignmentPolicyViolation",
+          "other",
+          "sandboxError",
+          "serverOverloaded",
+          "sessionBudgetExceeded",
+          "threadRollbackFailed",
+          "unauthorized",
+          "usageLimitExceeded"
+        ],
+        "objects": [
+          "activeTurnNotSteerable",
+          "httpConnectionFailed",
+          "responseStreamConnectionFailed",
+          "responseStreamDisconnected",
+          "responseTooManyFailedAttempts"
+        ]
+      },
+      "baselineUnhandled": {
+        "strings": [
+          "rateLimitExceeded"
+        ],
+        "objects": []
+      },
+      "added": {
+        "strings": [
+          "flexUnavailable",
+          "modelNotFound",
+          "tooManyDenials"
+        ],
+        "objects": []
+      }
+    },
+    "serverRequests": {
+      "baseline": [
+        "account/chatgptAuthTokens/refresh",
+        "applyPatchApproval",
+        "attestation/generate",
+        "execCommandApproval",
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/permissions/requestApproval",
+        "item/tool/call",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request"
+      ],
+      "target": [
+        "account/chatgptAuthTokens/refresh",
+        "applyPatchApproval",
+        "attestation/generate",
+        "execCommandApproval",
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/permissions/requestApproval",
+        "item/tool/call",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request"
+      ],
+      "added": [],
+      "handledByDsh": [
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/permissions/requestApproval",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request"
+      ]
+    },
+    "schemaDiff": {
+      "added": [
+        "v2/FeedbackSaveParams.json",
+        "v2/FeedbackSaveResponse.json",
+        "v2/GatewayOAuthCancelResponse.json",
+        "v2/GatewayOAuthChangedNotification.json",
+        "v2/GatewayOAuthLoginResponse.json",
+        "v2/GatewayOAuthReadResponse.json",
+        "v2/NullableGetAccountRateLimitsParams.json",
+        "v2/ThreadAttachmentAddParams.json",
+        "v2/ThreadAttachmentAddResponse.json",
+        "v2/ThreadAttachmentListParams.json",
+        "v2/ThreadAttachmentListResponse.json",
+        "v2/ThreadAttachmentOwnerListParams.json",
+        "v2/ThreadAttachmentOwnerListResponse.json",
+        "v2/ThreadAttachmentRemoveParams.json",
+        "v2/ThreadAttachmentRemoveResponse.json",
+        "v2/ThreadAttachmentUpdatedNotification.json",
+        "v2/ThreadPredictionUpdatedNotification.json",
+        "v2/ThreadReadStateChangedNotification.json"
+      ],
+      "removed": [
+        "v2/ThreadRollbackParams.json",
+        "v2/ThreadRollbackResponse.json"
+      ],
+      "changed": [
+        "ClientRequest.json",
+        "PermissionsRequestApprovalParams.json",
+        "ServerNotification.json",
+        "ServerRequest.json",
+        "codex_app_server_protocol.schemas.json",
+        "codex_app_server_protocol.v2.schemas.json",
+        "v1/InitializeParams.json",
+        "v2/AccountRateLimitsUpdatedNotification.json",
+        "v2/AccountUpdatedNotification.json",
+        "v2/ConfigBatchWriteParams.json",
+        "v2/ConfigReadResponse.json",
+        "v2/ConfigRequirementsReadResponse.json",
+        "v2/ErrorNotification.json",
+        "v2/FeedbackUploadResponse.json",
+        "v2/GetAccountRateLimitsResponse.json",
+        "v2/GetAccountResponse.json",
+        "v2/HookCompletedNotification.json",
+        "v2/HookStartedNotification.json",
+        "v2/HooksListResponse.json",
+        "v2/ItemCompletedNotification.json",
+        "v2/ItemGuardianApprovalReviewCompletedNotification.json",
+        "v2/ItemGuardianApprovalReviewStartedNotification.json",
+        "v2/ItemStartedNotification.json",
+        "v2/ListMcpServerStatusParams.json",
+        "v2/ListMcpServerStatusResponse.json",
+        "v2/McpResourceReadParams.json",
+        "v2/McpServerOauthLoginCompletedNotification.json",
+        "v2/McpServerOauthLoginResponse.json",
+        "v2/ModelListResponse.json",
+        "v2/ModelProviderCapabilitiesReadResponse.json",
+        "v2/PluginReadResponse.json",
+        "v2/RawResponseItemCompletedNotification.json",
+        "v2/ReviewStartParams.json",
+        "v2/ReviewStartResponse.json",
+        "v2/SkillsListResponse.json",
+        "v2/ThreadForkResponse.json",
+        "v2/ThreadGoalClearParams.json",
+        "v2/ThreadGoalSetParams.json",
+        "v2/ThreadItemsListParams.json",
+        "v2/ThreadItemsListResponse.json",
+        "v2/ThreadListParams.json",
+        "v2/ThreadListResponse.json",
+        "v2/ThreadMetadataUpdateResponse.json",
+        "v2/ThreadReadResponse.json",
+        "v2/ThreadResumeParams.json",
+        "v2/ThreadResumeResponse.json",
+        "v2/ThreadRevertResponse.json",
+        "v2/ThreadSettingsUpdatedNotification.json",
+        "v2/ThreadStartParams.json",
+        "v2/ThreadStartResponse.json",
+        "v2/ThreadStartedNotification.json",
+        "v2/ThreadTurnsListResponse.json",
+        "v2/ThreadUnarchiveResponse.json",
+        "v2/TurnCompletedNotification.json",
+        "v2/TurnStartParams.json",
+        "v2/TurnStartResponse.json",
+        "v2/TurnStartedNotification.json",
+        "v2/TurnSteerParams.json"
+      ]
+    }
+  }
+}
