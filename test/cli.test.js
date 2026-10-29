@@ -42,7 +42,7 @@ test('prints package version', () => {
     windowsHide: true,
   })
   assert.equal(result.status, 0)
-  assert.equal(result.stdout.trim(), '0.2.0')
+  assert.equal(result.stdout.trim(), '0.2.1')
 })
 
 test('schema failure returns exit 2 and writes an incomplete JSON artifact', async t => {
